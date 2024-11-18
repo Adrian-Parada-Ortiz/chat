@@ -1,75 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat App</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    #chat {
-      margin: 0 auto;
-      max-width: 400px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    #messages {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      height: 200px;
-      overflow-y: scroll;
-      border: 1px solid #ccc;
-      margin-bottom: 10px;
-      padding: 5px;
-    }
-    #messages li {
-      padding: 5px;
-      border-bottom: 1px solid #eee;
-    }
-    #message-form {
-      display: flex;
-      gap: 5px;
-    }
-    #message-form input {
-      flex: 1;
-    }
-  </style>
-</head>
-<body>
-  <div id="chat">
-    <ul id="messages"></ul>
-    <form id="message-form">
-      <input id="message-input" autocomplete="off" placeholder="Type a message..." />
-      <button>Send</button>
-    </form>
-  </div>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-
-    const form = document.getElementById('message-form');
-    const input = document.getElementById('message-input');
-    const messages = document.getElementById('messages');
-
-    // Handle form submission
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (input.value) {
-        socket.emit('chat message', input.value);
-        input.value = '';
-      }
-    });
-
-    // Receive and display messages
-    socket.on('chat message', (msg) => {
-      const li = document.createElement('li');
-      li.textContent = msg;
-      messages.appendChild(li);
-      messages.scrollTop = messages.scrollHeight;
-    });
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React</title>
+    <script type="module" crossorigin src="/assets/index-Ej6zIHSX.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CPiwlVjp.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
