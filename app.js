@@ -1,32 +1,29 @@
-const express = require('express');
 const http = require('http');
-const { Server } = require('socket.io');
+const express = require('express');
 
-// Initialize the app and server
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
 
-// Serve static files
+const io = require('socket.io')(server, {
+    cors: { origin: '*' }
+});
+
 app.use(express.static('public'));
 
-// Handle Socket.IO connections
+let cache = [];
+
 io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
-
-  // Handle messages
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg); // Broadcast the message to all clients
-  });
-
-  // Handle disconnection
-  socket.on('disconnect', () => {
-    console.log('A user disconnected:', socket.id);
-  });
+    console.log('Se ha conectado un cliente');
+	
+	
+    socket.emit('chat_history', { cache: cache });
+	
+	
+    socket.on('chat_message', (data) => {
+        io.emit('chat_message', data);
+        cache.push(data);
+        cache = cache.slice(-20);
+    });
 });
 
-// Start the server
-const PORT = 3000;
-server.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+server.listen(3000);
