@@ -1,29 +1,31 @@
-const http = require('http');
 const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
+const io = new Server(server);
 
-const io = require('socket.io')(server, {
-    cors: { origin: '*' }
-});
+// Serve static files (e.g., HTML, CSS)
+app.use(express.static(__dirname));
 
-app.use(express.static('public'));
-
-let cache = [];
-
+// Handle client connection
 io.on('connection', (socket) => {
-    console.log('Se ha conectado un cliente');
-	
-	
-    socket.emit('chat_history', { cache: cache });
-	
-	
-    socket.on('chat_message', (data) => {
-        io.emit('chat_message', data);
-        cache.push(data);
-        cache = cache.slice(-20);
-    });
+  console.log('A user connected');
+
+  // Listen for chat messages
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg); // Broadcast to all connected users
+  });
+
+  // Handle disconnect
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
 });
 
-server.listen(3000);
+// Start server
+const PORT = 3000;
+server.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
